@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from .forms import AddressForm
-from .models import Address, UserError
+from .models import Address, UserError, ConcurrencyError
 from django.views.generic.edit import CreateView, UpdateView
 from django.db import transaction
 
@@ -15,23 +15,6 @@ class AddAddressView(CreateView):
     model = Address
     fields = ['name', 'email_address']
     success_url = "/"
-
-
-# def add(request):
-#     if request.method == 'POST':
-#         form = AddressForm(request.POST)
-#         if form.is_valid():
-#             form.save()
-#             return redirect('index')
-#     else:
-#         form = AddressForm()
-#     return render(request, 'add.html', {'form': form})
-
-# class EditAddressView(UpdateView):
-#     template_name = 'edit.html'
-#     model = Address
-#     fields = ['name', 'email_address']
-#     success_url = '/'
 
 
 def edit(request, address_id):
@@ -49,9 +32,12 @@ def edit(request, address_id):
                 except UserError as e:
                     messages.error(request, str(e))
             else:
-                form.save()
+                try:
+                    with transaction.atomic():
+                        form.save()
+                except ConcurrencyError as e:
+                    messages.error(request, str(e))
             return redirect('index')
     else:
         form = AddressForm(instance=address)
     return render(request, 'edit.html', {'form': form})
-
