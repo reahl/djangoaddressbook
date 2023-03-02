@@ -1,0 +1,13 @@
+{% extends 'addressbook.html' %}
+{% load bootstrap4 %}
+
+{% block title %}Addresses{% endblock %}
+
+{% block main %}
+    {% for address in addresses %}
+      <p>
+          {{ address.name }}: {{ address.email_address }}
+          <a href="{% url 'edit' address.id %}">Edit</a>
+      </p>
+    {% endfor %}
+{% endblock %}

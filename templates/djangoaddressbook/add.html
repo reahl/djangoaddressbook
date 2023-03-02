@@ -1,0 +1,14 @@
+{% extends 'addressbook.html' %}
+{% load bootstrap4 %}
+
+{% block title %}Add Address{% endblock %}
+
+{% block main %}
+
+  <form method="post" data-parsley-validate>
+    {% csrf_token %}
+    {% bootstrap_form form %}
+    {% bootstrap_button "Save" button_type="submit" button_class="btn-primary" %}
+  </form>
+
+{% endblock %}

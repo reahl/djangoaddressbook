@@ -1,0 +1,32 @@
+{% extends 'bootstrap4/bootstrap4.html' %}
+{% load bootstrap4 %}
+
+{% block bootstrap4_content %}
+    <div class="container">
+
+        {% block navbar %}
+            <nav id="my_nav" class="bg-primary navbar navbar-dark navbar-expand-sm">
+                <a href="{% url 'index' %}" class="navbar-brand">Address book</a>
+                <button aria-controls="my_nav_collapsable" aria-label="Toggle navigation" data-target="#my_nav_collapsable"
+                        data-toggle="collapse" type="button" class="navbar-toggler">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div id="my_nav_collapsable" class="collapse navbar-collapse">
+                    <ul class="nav navbar-nav">
+                        <li class="nav-item"><a href="{% url 'index' %}" class="nav-link">Show</a></li>
+                        <li class="nav-item"><a href="{% url 'add' %}" class="nav-link">Add</a></li>
+                    </ul>
+                </div>
+            </nav>
+        {% endblock %}
+
+        <h1>{% block title %}{% endblock %}</h1>
+
+        {% autoescape off %}{% bootstrap_messages %}{% endautoescape %}
+
+        {% block main %}
+        {% endblock %}
+
+    </div>
+
+{% endblock %}
